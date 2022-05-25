@@ -22,6 +22,10 @@ jobs:
             name: packer.nvim
             branch: master
 
+          - upstream: llvm/llvm-project
+            name: llvm-project
+            branch: main
+
     steps:
       - uses: actions/checkout@v3.0.2
         with:
