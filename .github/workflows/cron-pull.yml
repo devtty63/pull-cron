@@ -55,6 +55,7 @@ jobs:
 
             git pull upstream "${{ matrix.repo.branch }}:${{ matrix.repo.branch }}" \
               --rebase
+            git fetch upstream --tags
 
             git config --local --unset-all 'http.https://github.com/.extraheader'
 
