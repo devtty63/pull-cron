@@ -5,11 +5,13 @@ name: cron-pull
 on:
   push:
     branches: [main]
+    paths: ['.github/workflows/cron-pull.yml']
   pull_request:
     branches: [main]
+    paths: ['.github/workflows/cron-pull.yml']
   schedule:
-    # Every hour
-    - cron: '0 * * * *'
+    # Everyday
+    - cron: '0 0 * * *'
   workflow_dispatch:
 
 jobs:
@@ -32,6 +34,7 @@ jobs:
           repository: devtty63/${{ matrix.repo.name }}
           path: ${{ matrix.repo.name }}
           ref: ${{ matrix.repo.branch }}
+          fetch-depth: 1
 
       - name: Pull changes from upstream
         run: |
