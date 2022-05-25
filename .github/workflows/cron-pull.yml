@@ -28,6 +28,10 @@ jobs:
             name: llvm-project
             branch: main
 
+          - upstream: sainnhe/sonokai
+            name: sonokai
+            branch: master
+
     steps:
       - uses: actions/checkout@v3.0.2
         with:
