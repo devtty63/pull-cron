@@ -1,0 +1,47 @@
+---
+
+name: Sync repositories
+input:
+  token:
+    required: true
+  upstream:
+    required: true
+  name:
+    required: true
+  branch:
+    required: false
+    default: master
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v3.0.2
+      with:
+        repository: devtty63/${{ inputs.name }}
+        path: ${{ inputs.name }}
+        ref: ${{ inputs.branch }}
+        fetch-depth: 1
+
+    - name: Pull changes from upstream
+      shell: bash
+      run: |
+        (cd "${{ inputs.name }}";
+
+          git config --list
+          git config --local user.name "devtty63"
+          git config --local user.email "devtty63[bot]@users.noreply.github.com"
+
+          git remote add upstream \
+            "https://github.com/${{ inputs.upstream}}.git"
+          git remote set-url origin \
+            "https://${{ inputs.token }}@github.com/devtty63/${{ inputs.name }}.git"
+
+          git pull upstream "${{ inputs.branch }}:${{ inputs.branch }}" \
+            --rebase
+          git fetch upstream --tags
+
+          git config --local --unset-all 'http.https://github.com/.extraheader'
+
+          git push origin
+          git push origin --tags
+        )

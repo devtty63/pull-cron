@@ -1,0 +1,66 @@
+---
+
+name: misc
+
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/vim.yml']
+  pull_request:
+    branches: [main]
+    paths: ['.github/workflows/vim.yml']
+  schedule:
+    # Everyday
+    - cron: '34 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        repo:
+          - upstream: wbthomason/packer.nvim
+            name: packer.nvim
+            branch: master
+
+          - upstream: sainnhe/sonokai
+            name: sonokai
+            branch: master
+
+          - upstream: wakatime/vim-wakatime
+            name: vim-wakatime
+            branch: master
+
+          - upstream: zirrostig/vim-schlepp
+            name: vim-schlepp
+            branch: master
+
+          - upstream: bogado/file-line
+            name: file-line
+            branch: master
+
+          - upstream: tpope/vim-sensible
+            name: vim-sensible
+            branch: master
+
+          - upstream: tpope/vim-surround
+            name: vim-surround
+            branch: master
+
+          - upstream: tpope/vim-sleuth
+            name: vim-sleuth
+            branch: master
+
+          - upstream: tpope/vim-obsession
+            name: vim-obsession
+            branch: master
+
+    steps:
+      - uses: actions/checkout@v3.0.2
+      - uses: ./.github/actions/sync/
+        with:
+          token: ${{ secrets.GH_SECRET_TOKEN }}
+          upstream: ${{ matrix.repo.upstream }}
+          name: ${{ matrix.repo.name }}
+          branch: ${{ matrix.repo.branch }}
